@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Poornima P — Frontend Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg1: #f5e6ff;
+    --bg2: #fde8f0;
+    --bg3: #dff3ec;
+    --bg4: #fef3dc;
+    --glass: rgba(255,255,255,0.45);
+    --glass-border: rgba(255,255,255,0.7);
+    --glass-shadow: 0 8px 32px rgba(180,140,200,0.18);
+    --accent: #b07fd4;
+    --accent2: #e898b0;
+    --text: #3a2d4a;
+    --muted: #7a6b8a;
+    --nav-glass: rgba(255,255,255,0.6);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: #f5e6ff;
+  }
+
+  /* Animated pastel mesh background */
+  .bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 10%, #fde8f0 0%, transparent 60%),
+      radial-gradient(ellipse 70% 70% at 90% 0%, #e8d5ff 0%, transparent 55%),
+      radial-gradient(ellipse 80% 60% at 80% 90%, #dff3ec 0%, transparent 60%),
+      radial-gradient(ellipse 60% 70% at 20% 90%, #fef3dc 0%, transparent 55%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, #f9eeff 0%, #fdf3ff 100%);
+    animation: bgShift 12s ease-in-out infinite alternate;
+  }
+  @keyframes bgShift {
+    0%   { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(15deg); }
+  }
+
+  /* Floating blobs */
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.35;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .blob1 { width: 400px; height: 400px; background: #c9a0f0; top: -80px; left: -80px; animation: float1 14s ease-in-out infinite alternate; }
+  .blob2 { width: 350px; height: 350px; background: #f7b8d3; top: 40%; right: -60px; animation: float2 16s ease-in-out infinite alternate; }
+  .blob3 { width: 300px; height: 300px; background: #a8e6cf; bottom: 5%; left: 20%; animation: float1 18s ease-in-out infinite alternate; }
+  @keyframes float1 { 0%{transform:translate(0,0) scale(1);} 100%{transform:translate(30px,40px) scale(1.07);} }
+  @keyframes float2 { 0%{transform:translate(0,0) scale(1);} 100%{transform:translate(-30px,30px) scale(1.1);} }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1rem 5%;
+    background: var(--nav-glass);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 0 2px 24px rgba(180,140,200,0.10);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: 0.02em;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--muted);
+    font-size: 0.88rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+    transition: color 0.25s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 6rem 5% 4rem;
+    text-align: center;
+  }
+  .hero-inner { max-width: 760px; }
+  .hero-tag {
+    display: inline-block;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    border-radius: 50px; padding: 0.4rem 1.2rem;
+    font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 9vw, 6.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--text);
+    animation: fadeUp 0.8s 0.15s ease both;
+  }
+  .hero-name em { font-style: italic; color: var(--accent); }
+  .hero-sub {
+    margin-top: 1.2rem; font-size: 1.12rem; color: var(--muted); font-weight: 300;
+    line-height: 1.7;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .hero-btns {
+    margin-top: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.45s ease both;
+  }
+  .btn-primary {
+    padding: 0.8rem 2.2rem; border-radius: 50px; border: none; cursor: pointer;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+    letter-spacing: 0.04em; text-decoration: none;
+    box-shadow: 0 4px 20px rgba(176,127,212,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(176,127,212,0.45); }
+  .btn-outline {
+    padding: 0.8rem 2.2rem; border-radius: 50px;
+    border: 1.5px solid var(--accent); cursor: pointer;
+    background: var(--glass); backdrop-filter: blur(12px);
+    color: var(--accent); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+    letter-spacing: 0.04em; text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-outline:hover { background: rgba(176,127,212,0.12); transform: translateY(-2px); }
+
+  .scroll-hint {
+    margin-top: 4rem; display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    color: var(--muted); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    animation: fadeUp 0.8s 0.6s ease both;
+  }
+  .scroll-line {
+    width: 1.5px; height: 48px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(24px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  /* GLASS CARD */
+  .glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(18px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* SHARED SECTION LAYOUT */
+  .section-wrap {
+    max-width: 1100px; margin: 0 auto; padding: 6rem 5%;
+  }
+  .section-header {
+    text-align: center; margin-bottom: 3.5rem;
+  }
+  .section-label {
+    display: inline-block; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 0.7rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 300; color: var(--text);
+    line-height: 1.15;
+  }
+  .section-title em { font-style: italic; color: var(--accent); }
+
+  /* ABOUT */
+  #about .section-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  .about-text-col {}
+  .about-text-col p { color: var(--muted); font-size: 1.02rem; line-height: 1.85; margin-bottom: 1rem; }
+  .stat-row { display: flex; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat {
+    padding: 1.2rem 1.6rem; border-radius: 18px;
+    background: var(--glass); backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border);
+    text-align: center; flex: 1; min-width: 100px;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .stat-label { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.2rem; }
+
+  .about-img-col {
+    display: flex; justify-content: center; align-items: center;
+  }
+  .avatar-ring {
+    width: 260px; height: 260px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2), #a8e6cf);
+    padding: 3px;
+    box-shadow: 0 8px 40px rgba(176,127,212,0.3);
+  }
+  .avatar-inner {
+    width: 100%; height: 100%; border-radius: 50%;
+    background: linear-gradient(135deg, #f5e6ff, #fde8f0);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5rem; font-weight: 300; color: var(--accent);
+  }
+
+  /* SKILLS */
+  #skills { background: transparent; }
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.4rem;
+  }
+  .skill-card {
+    padding: 1.6rem 1.4rem; border-radius: 20px; text-align: center;
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: default;
+  }
+  .skill-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(180,140,200,0.22); }
+  .skill-icon { font-size: 2rem; margin-bottom: 0.7rem; }
+  .skill-cat {
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 0.5rem;
+  }
+  .skill-items { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.8rem;
+  }
+  .project-card {
+    padding: 2rem; border-radius: 24px; overflow: hidden; position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .project-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(180,140,200,0.25); }
+  .project-accent {
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .project-badge {
+    display: inline-block; padding: 0.3rem 0.9rem; border-radius: 50px; font-size: 0.72rem;
+    letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 1rem;
+    background: rgba(176,127,212,0.12); color: var(--accent); border: 1px solid rgba(176,127,212,0.25);
+  }
+  .project-title {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600;
+    color: var(--text); margin-bottom: 0.8rem; line-height: 1.2;
+  }
+  .project-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.75; margin-bottom: 1.4rem; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.4rem; }
+  .tag {
+    padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 500;
+    background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.8);
+    color: var(--muted);
+  }
+  .project-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    text-decoration: none; color: var(--accent); font-size: 0.85rem; font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: gap 0.2s;
+  }
+  .project-link:hover { gap: 0.7rem; }
+
+  /* CERTIFICATIONS */
+  .cert-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem;
+  }
+  .cert-card {
+    padding: 1.6rem; border-radius: 20px;
+    display: flex; gap: 1rem; align-items: flex-start;
+    transition: transform 0.25s;
+  }
+  .cert-card:hover { transform: translateY(-4px); }
+  .cert-icon {
+    width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  }
+  .cert-title { font-weight: 600; font-size: 0.92rem; color: var(--text); margin-bottom: 0.3rem; }
+  .cert-org { font-size: 0.8rem; color: var(--muted); }
+
+  /* ACHIEVEMENTS */
+  .ach-list {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem;
+  }
+  .ach-item {
+    padding: 1.4rem 1.6rem; border-radius: 18px;
+    display: flex; align-items: center; gap: 1rem;
+    transition: transform 0.25s;
+  }
+  .ach-item:hover { transform: translateX(4px); }
+  .ach-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+  }
+  .ach-text { font-size: 0.92rem; color: var(--muted); line-height: 1.5; }
+
+  /* CONTACT */
+  #contact { text-align: center; }
+  .contact-card {
+    max-width: 640px; margin: 0 auto; padding: 3.5rem 2.5rem; border-radius: 32px;
+  }
+  .contact-card p { color: var(--muted); font-size: 1rem; line-height: 1.7; margin-bottom: 2rem; }
+  .contact-links {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 0.75rem 1.6rem; border-radius: 50px; text-decoration: none;
+    font-size: 0.88rem; font-weight: 500; letter-spacing: 0.04em;
+    background: var(--glass); backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border); color: var(--text);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+  .contact-link:hover {
+    background: rgba(176,127,212,0.15); transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(176,127,212,0.2);
+    color: var(--accent);
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center; padding: 2rem;
+    font-size: 0.8rem; color: var(--muted);
+    border-top: 1px solid rgba(255,255,255,0.5);
+  }
+
+  /* SCROLL REVEAL */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media(max-width: 768px) {
+    #about .section-wrap { grid-template-columns: 1fr; }
+    .about-img-col { order: -1; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-canvas"></div>
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Poornima P</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">✦ Available for Internship</div>
+    <h1 class="hero-name">
+      <em>Poornima</em> P
+    </h1>
+    <p class="hero-sub">
+      Frontend Developer & CS Student at Sri Sairam Engineering College<br/>
+      Crafting beautiful, AI-powered web experiences with React &amp; modern APIs.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span>scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="about-text-col reveal">
+      <span class="section-label">About Me</span>
+      <h2 class="section-title" style="text-align:left; margin-bottom:1.5rem;">
+        Building things for the <em>web</em>
+      </h2>
+      <p>I'm a 2nd-year Computer Science & Engineering student with a strong academic record (CGPA 9.04) and a genuine passion for frontend development. I love turning ideas into interactive, beautiful experiences.</p>
+      <p>I've worked on real projects spanning blockchain-based systems, AI-powered document tools, and data visualization — always focusing on clean UI and great user experience.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num">9.04</div><div class="stat-label">CGPA / 10</div></div>
+        <div class="stat"><div class="stat-num">3+</div><div class="stat-label">Live Projects</div></div>
+        <div class="stat"><div class="stat-num">2028</div><div class="stat-label">Graduation</div></div>
+      </div>
+    </div>
+    <div class="about-img-col reveal">
+      <div class="avatar-ring">
+        <div class="avatar-inner">P</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-label">Technical Skills</span>
+      <h2 class="section-title">What I <em>work with</em></h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card glass-card reveal">
+        <div class="skill-icon">🌐</div>
+        <div class="skill-cat">Web Development</div>
+        <div class="skill-items">HTML · CSS · JavaScript<br/>React.js · SpringBoot (Basics)</div>
+      </div>
+      <div class="skill-card glass-card reveal">
+        <div class="skill-icon">💻</div>
+        <div class="skill-cat">Programming</div>
+        <div class="skill-items">C · Java</div>
+      </div>
+      <div class="skill-card glass-card reveal">
+        <div class="skill-icon">🗄️</div>
+        <div class="skill-cat">Database</div>
+        <div class="skill-items">SQL</div>
+      </div>
+      <div class="skill-card glass-card reveal">
+        <div class="skill-icon">🛠️</div>
+        <div class="skill-cat">Tools</div>
+        <div class="skill-items">GitHub · Postman</div>
+      </div>
+      <div class="skill-card glass-card reveal">
+        <div class="skill-icon">🧠</div>
+        <div class="skill-cat">Concepts</div>
+        <div class="skill-items">DSA · OOP · Algorithms · DBMS</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-label">Portfolio</span>
+      <h2 class="section-title">Featured <em>Projects</em></h2>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card glass-card reveal">
+        <div class="project-accent"></div>
+        <div class="project-badge">Blockchain · Frontend</div>
+        <div class="project-title">Blockchain Blue Carbon Registry</div>
+        <p class="project-desc">Built the complete frontend for a blockchain-based carbon credit registry focused on blue carbon ecosystems. Developed UI for the MRV module to display and track carbon data with project listings and verification status.</p>
+        <div class="project-tags">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Blockchain</span>
+        </div>
+        <a href="https://poornimapalani16.github.io/Bluecarbon-Registry-system/" target="_blank" class="project-link">Live Demo →</a>
+      </div>
+
+      <div class="project-card glass-card reveal">
+        <div class="project-accent" style="background: linear-gradient(90deg, #e898b0, #a8e6cf);"></div>
+        <div class="project-badge" style="background:rgba(232,152,176,0.12); color:#c0607a; border-color:rgba(232,152,176,0.25);">AI · Web App</div>
+        <div class="project-title">Document Mentor</div>
+        <p class="project-desc">A web application that allows users to interact with documents using AI. Developed the frontend and integrated an external AI API to process and respond to user queries from document content.</p>
+        <div class="project-tags">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">AI API</span>
+        </div>
+        <a href="https://poornimapalani16.github.io/ai-best-review-system/" target="_blank" class="project-link" style="color:#c0607a;">Live Demo →</a>
+      </div>
+
+      <div class="project-card glass-card reveal">
+        <div class="project-accent" style="background: linear-gradient(90deg, #a8e6cf, #fef3dc);"></div>
+        <div class="project-badge" style="background:rgba(168,230,207,0.15); color:#3a8a6e; border-color:rgba(168,230,207,0.35);">Python · Data</div>
+        <div class="project-title">Expense Tracker</div>
+        <p class="project-desc">A Python-based data analysis tool using Pandas and Matplotlib to analyze, track, and visualize price trends through interactive charts and dashboards.</p>
+        <div class="project-tags">
+          <span class="tag">Python</span>
+          <span class="tag">Pandas</span>
+          <span class="tag">Matplotlib</span>
+          <span class="tag">Data Viz</span>
+        </div>
+        <span class="project-link" style="color:#3a8a6e; cursor:default; opacity:0.6;">Data Tool</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-label">Credentials</span>
+      <h2 class="section-title">Certifications &amp; <em>Learning</em></h2>
+    </div>
+    <div class="cert-grid">
+      <div class="cert-card glass-card reveal">
+        <div class="cert-icon">🤖</div>
+        <div>
+          <div class="cert-title">Introduction to Modern AI</div>
+          <div class="cert-org">Cisco Networking Academy</div>
+        </div>
+      </div>
+      <div class="cert-card glass-card reveal">
+        <div class="cert-icon">🌐</div>
+        <div>
+          <div class="cert-title">Networking Basics</div>
+          <div class="cert-org">Cisco Networking Academy</div>
+        </div>
+      </div>
+      <div class="cert-card glass-card reveal">
+        <div class="cert-icon">📊</div>
+        <div>
+          <div class="cert-title">Project Assessment, Monitoring & Evaluation</div>
+          <div class="cert-org">IEEE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-label">Activities</span>
+      <h2 class="section-title">Achievements &amp; <em>Involvement</em></h2>
+    </div>
+    <div class="ach-list">
+      <div class="ach-item glass-card reveal">
+        <div class="ach-dot"></div>
+        <div class="ach-text">Active student member of IEEE (Institute of Electrical and Electronics Engineers)</div>
+      </div>
+      <div class="ach-item glass-card reveal">
+        <div class="ach-dot"></div>
+        <div class="ach-text">Participant in Smart India Hackathon (SIH)</div>
+      </div>
+      <div class="ach-item glass-card reveal">
+        <div class="ach-dot"></div>
+        <div class="ach-text">Active volunteer in Unnat Bharat Abhiyan community initiative</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="contact-card glass-card reveal">
+      <span class="section-label">Let's Connect</span>
+      <h2 class="section-title" style="margin: 0.5rem 0 1rem;">Open to <em>Opportunities</em></h2>
+      <p>I'm actively looking for web development internships where I can contribute, learn, and grow. Let's build something great together!</p>
+      <div class="contact-links">
+        <a href="mailto:poornimapalani16@gmail.com" class="contact-link">📧 Email</a>
+        <a href="https://www.linkedin.com/in/poornima-p-180527340/" target="_blank" class="contact-link">💼 LinkedIn</a>
+        <a href="https://github.com/poornimapalani16" target="_blank" class="contact-link">🐙 GitHub</a>
+        <a href="https://poornimapalani16.github.io/portfoli/" target="_blank" class="contact-link">🌐 Portfolio</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Designed &amp; built by Poornima P · 2026</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if(entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Stagger children
+  document.querySelectorAll('.skills-grid, .projects-grid, .cert-grid, .ach-list').forEach(grid => {
+    [...grid.children].forEach((child, i) => {
+      child.style.transitionDelay = `${i * 0.1}s`;
+    });
+  });
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
